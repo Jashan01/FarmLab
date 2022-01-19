@@ -1,7 +1,5 @@
 
 # FarmLab
-=======
-# farm_lab
 
 A new Flutter project.
 
