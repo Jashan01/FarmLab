@@ -178,17 +178,9 @@ class _HomePageState extends State<HomePage> {
         ),
       );
   }
-
  void _toggleForm() {
-    if(isRegister == true){
-      setState(() {
-        isRegister = false;
-      });
-    }
-    else{
-      setState(() {
-        isRegister = true;
-      });
-    }
+    setState(() {
+      isRegister = !isRegister;
+    });
   }
 }
