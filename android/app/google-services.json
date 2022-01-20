@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "356784306194",
+    "project_id": "farmlab-82e95",
+    "storage_bucket": "farmlab-82e95.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:356784306194:android:7b4a6de207d9b39b7bc0cb",
+        "android_client_info": {
+          "package_name": "com.capstone.farm_lab"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "356784306194-ue81o0jc627lstdre3kb07bhuc82vk4v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.capstone.farm_lab",
+            "certificate_hash": "e9edc697a38b9016831bc135799cff95ca5fd9ba"
+          }
+        },
+        {
+          "client_id": "356784306194-0su52uncint2anbls8u5en6k8ttelma2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCvNzIPZgFk-4qYjGNAQbI5Rq23wlGUuDM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "356784306194-0su52uncint2anbls8u5en6k8ttelma2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
