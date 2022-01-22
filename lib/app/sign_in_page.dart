@@ -1,14 +1,16 @@
 import 'package:farm_lab/custom_widgets/custom_button.dart';
+import 'package:farm_lab/services/auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+class SignInPage extends StatefulWidget {
+  //const SignInPage({Key? key}) : super(key: key);
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<SignInPage> createState() => _SignInPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _SignInPageState extends State<SignInPage> {
   bool isRegister = false;
   @override
   Widget build(BuildContext context) {
@@ -139,7 +141,7 @@ class _HomePageState extends State<HomePage> {
             CustomButton(
               text: 'Login using Google',
               backgroundColor: const Color(0xFF008B61),
-              onPressed: () {},
+              onPressed: ()=> _signInWithGoogle(context),
             ),
             const SizedBox(height: 30),
             Center(
@@ -153,15 +155,21 @@ class _HomePageState extends State<HomePage> {
                       color: Colors.black,
                     ),
                   ),
-                  FlatButton(
-                    child: const Text(
-                      'Sign In',
-                      style: TextStyle(
-                        color: Color(0xFF008B61),
-                      ),
-                    ),
-                    onPressed: _toggleForm,
-                  ),
+                  GestureDetector(
+                    onTap: _toggleForm,
+                    child: Text('Sign In', style: TextStyle(
+                      color: Color(0xFF008B61),
+                    ),),
+                  )
+                  // FlatButton(
+                  //   child: const Text(
+                  //     'Sign In',
+                  //     style: TextStyle(
+                  //       color: Color(0xFF008B61),
+                  //     ),
+                  //   ),
+                  //   onPressed: _toggleForm,
+                  // ),
                 ],
               ),
             ),
@@ -254,7 +262,7 @@ class _HomePageState extends State<HomePage> {
             CustomButton(
               text: 'Login using Google',
               backgroundColor: const Color(0xFF008B61),
-              onPressed: () {},
+              onPressed:  ()=> _signInWithGoogle(context),
             ),
             SizedBox(height: 30),
             Center(
@@ -291,4 +299,15 @@ class _HomePageState extends State<HomePage> {
       isRegister = !isRegister;
     });
   }
+
+  Future<void> _signInWithGoogle(BuildContext context) async {
+    try {
+      final auth = Provider.of<AuthBase>(context, listen: false);
+      final user = await auth.signInWithGoogle();
+    } on Exception catch (e) {
+      print(e.toString());
+    }
+  }
+
+
 }
