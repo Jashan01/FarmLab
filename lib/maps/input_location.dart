@@ -35,13 +35,13 @@ class InputLocationState extends State<InputLocation> {
         radius: 10000000,
         types: [],
         strictbounds: false,
-        apiKey: 'AIzaSyDtxkSRtliTM07TwCK7Z8gmdKFCuxx3Mvc',
+        apiKey: 'AIzaSyB4bePJqyzPudNRAg0P96zRQzCoHv8ZtS4',
         mode: Mode.overlay, // Mode.fullscreen
         language: "en",
         components: [Component(Component.country, "in")]);
 
     GoogleMapsPlaces _places =
-         GoogleMapsPlaces(apiKey: 'AIzaSyDtxkSRtliTM07TwCK7Z8gmdKFCuxx3Mvc');
+         GoogleMapsPlaces(apiKey: 'AIzaSyB4bePJqyzPudNRAg0P96zRQzCoHv8ZtS4');
     PlacesDetailsResponse detail =
         await _places.getDetailsByPlaceId(prediction.placeId);
     double latitude = detail.result.geometry.location.lat;

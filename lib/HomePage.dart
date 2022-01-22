@@ -16,6 +16,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
 
   Map<dynamic, dynamic> _locationData;
+  String _temperature="0";
   Future<void> _signOut(BuildContext context) async {
     try {
       final auth = Provider.of<AuthBase>(context, listen: false);
@@ -76,7 +77,11 @@ class _HomePageState extends State<HomePage> {
             onPressed: () => navigateAndDisplay(context),
             child: Icon(Icons.pin_drop_outlined),
             tooltip: "Google Map",
-          )
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Text(_temperature),
         ],
       ),
     );
@@ -95,4 +100,15 @@ class _HomePageState extends State<HomePage> {
       });
     }
   }
+  // Future<void>_getWeather(){
+  //   final requestUrl =
+  //       'api.openweathermap.org/data/2.5/weather?lat=${_locationData.}&lon={lon}&appid={API key}';
+  //   final response = await this.httpClient.get(Uri.encodeFull(requestUrl));
+  //
+  //   if (response.statusCode != 200) {
+  //     throw Exception('error retrieving weather: ${response.statusCode}');
+  //   }
+  //
+  //   return Forecast.fromJson(jsonDecode(response.body));
+  // }
 }
