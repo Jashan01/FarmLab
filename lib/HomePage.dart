@@ -1,10 +1,12 @@
 
+import 'dart:convert';
 import 'package:farm_lab/services/auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'custom_widgets/show_alert_diag.dart';
 import 'maps/input_location.dart';
+import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
   //const HomePage({Key? key}) : super(key: key);
@@ -16,7 +18,12 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
 
   Map<dynamic, dynamic> _locationData;
-  String _temperature="0";
+  double _temperature = 0;
+  http.Client httpClient;
+  int _humidity =0;
+  double _wind = 0;
+  double _precipitation = 0;
+  String _city;
   Future<void> _signOut(BuildContext context) async {
     try {
       final auth = Provider.of<AuthBase>(context, listen: false);
@@ -81,7 +88,49 @@ class _HomePageState extends State<HomePage> {
           SizedBox(
             height: 20,
           ),
-          Text(_temperature),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Container(
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Text("${_temperature.toStringAsFixed(0)}", style: TextStyle(fontSize: 20.0),),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("C | F ", style: TextStyle(
+                            fontSize: 10.0,
+                          ),),
+                          FlatButton(
+                            child: Row(
+                              children: [
+                                Icon(Icons.pin_drop_outlined),
+                                Text("${_city}"),
+                              ],
+                            ),
+                          )
+                        ],
+                      )
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ),
+          // Text("${_temperature.toStringAsFixed(0)}"),
+          // SizedBox(
+          //   height: 20,
+          // ),
+          // Text("${_city}"),
+          // SizedBox(
+          //   height: 20,
+          // ),
+          // Text("${_wind}"),
+          // SizedBox(
+          //   height: 20,
+          // ),
+          // Text("${_humidity}"),
         ],
       ),
     );
@@ -98,17 +147,24 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         _locationData = locationData;
       });
+      _getWeather();
     }
   }
-  // Future<void>_getWeather(){
-  //   final requestUrl =
-  //       'api.openweathermap.org/data/2.5/weather?lat=${_locationData.}&lon={lon}&appid={API key}';
-  //   final response = await this.httpClient.get(Uri.encodeFull(requestUrl));
-  //
-  //   if (response.statusCode != 200) {
-  //     throw Exception('error retrieving weather: ${response.statusCode}');
-  //   }
-  //
-  //   return Forecast.fromJson(jsonDecode(response.body));
-  // }
+  Future<void>_getWeather() async{
+    String requestUrl = "https://api.openweathermap.org/data/2.5/weather?lat=${_locationData['latitude']}&lon=${_locationData['longitude']}&appid=29d665e9501f799dd6d0bd42d977108e";
+    final response = await http.get(Uri.parse(requestUrl));
+
+    if (response.statusCode != 200) {
+      throw Exception('error retrieving weather: ${response.statusCode}');
+    }
+    setState(() {
+      _temperature = jsonDecode(response.body)['main']['temp']-273;
+      _humidity = jsonDecode(response.body)['main']['humidity'];
+      _city = jsonDecode(response.body)['name'];
+      _wind = jsonDecode(response.body)['wind']['speed'];
+      _precipitation = jsonDecode(response.body)['cloyds']['all'];
+    });
+    print(response.body);
+    print(_temperature);
+  }
 }
