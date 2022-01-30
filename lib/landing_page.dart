@@ -2,7 +2,7 @@ import 'package:farm_lab/services/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'HomePage.dart';
+import 'home_page.dart';
 import 'app/sign_in_page.dart';
 
 
