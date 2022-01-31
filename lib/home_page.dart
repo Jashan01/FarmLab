@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:farm_lab/services/auth.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import 'custom_widgets/custom_card.dart';
 import 'custom_widgets/show_alert_diag.dart';
@@ -20,8 +21,11 @@ class _HomePageState extends State<HomePage> {
   http.Client httpClient;
   int _humidity = 0;
   double _wind = 0;
-  double _precipitation = 0;
-  String _city;
+  int _precipitation = 0;
+  String _city = "null";
+  bool _loading=true;
+  bool _celsius = true;
+
   Future<void> _signOut(BuildContext context) async {
     try {
       final auth = Provider.of<AuthBase>(context, listen: false);
@@ -46,24 +50,34 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'FarmLab',
         ),
         elevation: 2.0,
         actions: [
           FlatButton(
-            child: Text('Logout',
-                style: TextStyle(
-                  fontSize: 18.0,
-                  color: Colors.white,
-                )),
+            child: const Text(
+              'Logout',
+              style: TextStyle(
+                fontSize: 18.0,
+                color: Colors.white,
+              ),
+            ),
             onPressed: () => _confirmSignOut(context),
             //_confirmSignOut(context),
           )
         ],
       ),
-      body: _buildContents(context),
+      body: _loading ? _loadingScreen(context) : _buildContents(context),
     );
+  }
+
+  Widget _loadingScreen(BuildContext context){
+    if(_locationData==null)
+      {
+        _getCurrentWeather();
+      }
+    return Center(child: CircularProgressIndicator());
   }
 
   Widget _buildContents(BuildContext context) {
@@ -71,13 +85,17 @@ class _HomePageState extends State<HomePage> {
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+
           children: [
-            Text(
+            const Text(
               'Dashboard',
-              style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w500),
+              style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.w500),
+              textAlign: TextAlign.left,
+
             ),
-            SizedBox(
-              height: 20,
+            const SizedBox(
+              height: 10,
             ),
             Card(
               child: Column(
@@ -89,33 +107,79 @@ class _HomePageState extends State<HomePage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       //mainAxisSize: MainAxisSize.max,
                       children: [
-                        Row(
-                          children: [
-                            Text(
-                              "28",
-                              style: TextStyle(fontSize: 30),
-                            ),
-                          ],
+                        GestureDetector(
+                          onTap: (){
+                            setState(() {
+                              _celsius=!_celsius;
+                            });
+                          },
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                _celsius?"${_temperature.toStringAsFixed(0)}":"${(_temperature * 1.8 + 32).toStringAsFixed(0)}",
+                                style: TextStyle(fontSize: 40),
+                              ),
+                              Opacity(
+                                opacity: 0,
+                                child: Text(
+                                  "C",
+                                  style: TextStyle(fontSize: 15),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.fromLTRB(0, 0, 4, 0),
+                                child: Text(
+                                  "C",
+                                  style: TextStyle(fontSize: 15,color: _celsius?Colors.green:Colors.black),
+                                ),
+                              ),
+                              Text(
+                                "|",
+                                style: TextStyle(fontSize: 15),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.fromLTRB(4, 0, 0, 0),
+                                child: Text(
+                                  "F",
+                                  style: TextStyle(fontSize: 15,color: !_celsius?Colors.green:Colors.black),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                         Container(
-                          padding: EdgeInsets.fromLTRB(0, 4, 4, 0),
-                          width: 300,
+                          padding: const EdgeInsets.fromLTRB(0, 4, 4, 0),
+                          width: 200,
                           child: Column(
-                           crossAxisAlignment: CrossAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              Text("Location"),
+                              GestureDetector(
+                                onTap: () => navigateAndDisplay(context),
+
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Icon(Icons.my_location,size: 15,color: Colors.green,),
+                                      SizedBox(width: 5,),
+                                      Text(_city,style: TextStyle(color: Colors.green),),
+                                    ],
+                                  )
+                              ),
                               SizedBox(
                                 height: 8,
                               ),
-
-                                Text("Synced 9:58 a.m."),
+                              Text("Synced 9:58 a.m."),
                             ],
                           ),
                         ),
                       ],
                     ),
                   ),
-                  SizedBox(height: 10,),
+                  const SizedBox(
+                    height: 10,
+                  ),
                   Padding(
                     padding: const EdgeInsets.all(4.0),
                     child: Row(
@@ -123,15 +187,15 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         CustomCard(
                           text: "Humidity",
-                          value: "58%",
+                          value: "${_humidity}%",
                         ),
                         CustomCard(
-                          text: "Humidity",
-                          value: "58%",
+                          text: "Precipitation",
+                          value: "${_precipitation}%",
                         ),
                         CustomCard(
-                          text: "Humidity",
-                          value: "58%",
+                          text: "Wind",
+                          value: "${_wind.toStringAsFixed(0)}%",
                         )
                       ],
                     ),
@@ -139,64 +203,25 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-            FloatingActionButton(
-              onPressed: () => navigateAndDisplay(context),
-              child: Icon(Icons.pin_drop_outlined),
-              tooltip: "Google Map",
-            ),
-            SizedBox(
+            /*Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                FloatingActionButton(
+                  onPressed: _getCurrentWeather,
+                  child: const Icon(Icons.my_location),
+                  tooltip: "Google Map",
+                ),
+                SizedBox(width: 10),
+                FloatingActionButton(
+                  onPressed: () => navigateAndDisplay(context),
+                  child: const Icon(Icons.pin_drop_outlined),
+                  tooltip: "Google Map",
+                ),
+              ],
+            ),*/
+            const SizedBox(
               height: 20,
             ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Container(
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Text(
-                          "${_temperature.toStringAsFixed(0)}",
-                          style: TextStyle(fontSize: 20.0),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "C | F ",
-                              style: TextStyle(
-                                fontSize: 10.0,
-                              ),
-                            ),
-                            FlatButton(
-                              child: Row(
-                                children: [
-                                  Icon(Icons.pin_drop_outlined),
-                                  Text("${_city}"),
-                                ],
-                              ),
-                            )
-                          ],
-                        )
-                      ],
-                    )
-                  ],
-                ),
-              ),
-            ),
-            // Text("${_temperature.toStringAsFixed(0)}"),
-            // SizedBox(
-            //   height: 20,
-            // ),
-            // Text("${_city}"),
-            // SizedBox(
-            //   height: 20,
-            // ),
-            // Text("${_wind}"),
-            // SizedBox(
-            //   height: 20,
-            // ),
-            // Text("${_humidity}"),
           ],
         ),
       ),
@@ -218,6 +243,18 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  _getCurrentWeather() async {
+    var currentLocation = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.best);
+    setState(() {
+      _locationData = {
+        'latitude': currentLocation.latitude,
+        'longitude': currentLocation.longitude,
+      };
+    });
+    _getWeather();
+  }
+
   Future<void> _getWeather() async {
     String requestUrl =
         "https://api.openweathermap.org/data/2.5/weather?lat=${_locationData['latitude']}&lon=${_locationData['longitude']}&appid=29d665e9501f799dd6d0bd42d977108e";
@@ -231,9 +268,17 @@ class _HomePageState extends State<HomePage> {
       _humidity = jsonDecode(response.body)['main']['humidity'];
       _city = jsonDecode(response.body)['name'];
       _wind = jsonDecode(response.body)['wind']['speed'];
-      _precipitation = jsonDecode(response.body)['cloyds']['all'];
+      _precipitation = jsonDecode(response.body)['clouds']['all'];
     });
     print(response.body);
     print(_temperature);
+    print(_humidity);
+    print(_city);
+    print(_wind);
+    print(_precipitation);
+    setState(() {
+      _loading=false;
+    });
+
   }
 }
