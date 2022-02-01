@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:farm_lab/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'custom_widgets/custom_card.dart';
 import 'custom_widgets/show_alert_diag.dart';
@@ -23,8 +24,9 @@ class _HomePageState extends State<HomePage> {
   double _wind = 0;
   int _precipitation = 0;
   String _city = "null";
-  bool _loading=true;
+  bool _loading = true;
   bool _celsius = true;
+  String _syncTime = "null";
 
   Future<void> _signOut(BuildContext context) async {
     try {
@@ -72,157 +74,174 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _loadingScreen(BuildContext context){
-    if(_locationData==null)
-      {
-        _getCurrentWeather();
-      }
+  Widget _loadingScreen(BuildContext context) {
+    if (_locationData == null) {
+      _getCurrentWeather();
+    }
     return Center(child: CircularProgressIndicator());
   }
 
   Widget _buildContents(BuildContext context) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-
-          children: [
-            const Text(
-              'Dashboard',
-              style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.w500),
-              textAlign: TextAlign.left,
-
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Card(
-              child: Column(
-                //crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      //mainAxisSize: MainAxisSize.max,
-                      children: [
-                        GestureDetector(
-                          onTap: (){
-                            setState(() {
-                              _celsius=!_celsius;
-                            });
-                          },
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                _celsius?"${_temperature.toStringAsFixed(0)}":"${(_temperature * 1.8 + 32).toStringAsFixed(0)}",
-                                style: TextStyle(fontSize: 40),
-                              ),
-                              Opacity(
-                                opacity: 0,
-                                child: Text(
-                                  "C",
+    return RefreshIndicator(
+      onRefresh: _getWeather,
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const Text(
+                'Dashboard',
+                style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.w500),
+                textAlign: TextAlign.left,
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Card(
+                child: Column(
+                  //crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //mainAxisSize: MainAxisSize.max,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _celsius = !_celsius;
+                              });
+                            },
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  _celsius
+                                      ? "${_temperature.toStringAsFixed(0)}"
+                                      : "${(_temperature * 1.8 + 32).toStringAsFixed(0)}",
+                                  style: TextStyle(fontSize: 40),
+                                ),
+                                Opacity(
+                                  opacity: 0,
+                                  child: Text(
+                                    "C",
+                                    style: TextStyle(fontSize: 15),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.fromLTRB(0, 0, 4, 0),
+                                  child: Text(
+                                    "C",
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        color: _celsius
+                                            ? Colors.green
+                                            : Colors.black),
+                                  ),
+                                ),
+                                Text(
+                                  "|",
                                   style: TextStyle(fontSize: 15),
                                 ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.fromLTRB(0, 0, 4, 0),
-                                child: Text(
-                                  "C",
-                                  style: TextStyle(fontSize: 15,color: _celsius?Colors.green:Colors.black),
+                                Padding(
+                                  padding: EdgeInsets.fromLTRB(4, 0, 0, 0),
+                                  child: Text(
+                                    "F",
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        color: !_celsius
+                                            ? Colors.green
+                                            : Colors.black),
+                                  ),
                                 ),
-                              ),
-                              Text(
-                                "|",
-                                style: TextStyle(fontSize: 15),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.fromLTRB(4, 0, 0, 0),
-                                child: Text(
-                                  "F",
-                                  style: TextStyle(fontSize: 15,color: !_celsius?Colors.green:Colors.black),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            padding: const EdgeInsets.fromLTRB(0, 4, 4, 0),
+                            width: 200,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                GestureDetector(
+                                    onTap: () => navigateAndDisplay(context),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Icon(
+                                          Icons.my_location,
+                                          size: 15,
+                                          color: Colors.green,
+                                        ),
+                                        SizedBox(
+                                          width: 5,
+                                        ),
+                                        Text(
+                                          _city,
+                                          style: TextStyle(color: Colors.green),
+                                        ),
+                                      ],//11 - 15
+                                    )),
+                                SizedBox(
+                                  height: 8,
                                 ),
-                              ),
-                            ],
+                                Text("Synced ${_syncTime}"),
+                              ],
+                            ),
                           ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.fromLTRB(0, 4, 4, 0),
-                          width: 200,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              GestureDetector(
-                                onTap: () => navigateAndDisplay(context),
-
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Icon(Icons.my_location,size: 15,color: Colors.green,),
-                                      SizedBox(width: 5,),
-                                      Text(_city,style: TextStyle(color: Colors.green),),
-                                    ],
-                                  )
-                              ),
-                              SizedBox(
-                                height: 8,
-                              ),
-                              Text("Synced 9:58 a.m."),
-                            ],
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          CustomCard(
+                            text: "Humidity",
+                            value: "${_humidity}%",
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        CustomCard(
-                          text: "Humidity",
-                          value: "${_humidity}%",
-                        ),
-                        CustomCard(
-                          text: "Precipitation",
-                          value: "${_precipitation}%",
-                        ),
-                        CustomCard(
-                          text: "Wind",
-                          value: "${_wind.toStringAsFixed(0)}%",
-                        )
-                      ],
-                    ),
-                  )
-                ],
+                          CustomCard(
+                            text: "Precipitation",
+                            value: "${_precipitation}%",
+                          ),
+                          CustomCard(
+                            text: "Wind",
+                            value: "${_wind.toStringAsFixed(0)}%",
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               ),
-            ),
-            /*Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                FloatingActionButton(
-                  onPressed: _getCurrentWeather,
-                  child: const Icon(Icons.my_location),
-                  tooltip: "Google Map",
-                ),
-                SizedBox(width: 10),
-                FloatingActionButton(
-                  onPressed: () => navigateAndDisplay(context),
-                  child: const Icon(Icons.pin_drop_outlined),
-                  tooltip: "Google Map",
-                ),
-              ],
-            ),*/
-            const SizedBox(
-              height: 20,
-            ),
-          ],
+              /*Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  FloatingActionButton(
+                    onPressed: _getCurrentWeather,
+                    child: const Icon(Icons.my_location),
+                    tooltip: "Google Map",
+                  ),
+                  SizedBox(width: 10),
+                  FloatingActionButton(
+                    onPressed: () => navigateAndDisplay(context),
+                    child: const Icon(Icons.pin_drop_outlined),
+                    tooltip: "Google Map",
+                  ),
+                ],
+              ),*/
+              const SizedBox(
+                height: 2000,
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -269,6 +288,7 @@ class _HomePageState extends State<HomePage> {
       _city = jsonDecode(response.body)['name'];
       _wind = jsonDecode(response.body)['wind']['speed'];
       _precipitation = jsonDecode(response.body)['clouds']['all'];
+      _syncTime = DateFormat("h:mm:ss a").format(DateTime.now()).toString();
     });
     print(response.body);
     print(_temperature);
@@ -277,8 +297,7 @@ class _HomePageState extends State<HomePage> {
     print(_wind);
     print(_precipitation);
     setState(() {
-      _loading=false;
+      _loading = false;
     });
-
   }
 }
