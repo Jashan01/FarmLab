@@ -37,6 +37,14 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  double pH(double height) {
+    return MediaQuery.of(context).size.height * (height / 844);
+  }
+
+  double pW(double width) {
+    return MediaQuery.of(context).size.width * (width / 390);
+  }
+
   Future<void> _confirmSignOut(BuildContext context) async {
     final didRequestSignout = await showAlertDiag(context,
         title: 'Logout',
@@ -50,27 +58,56 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'FarmLab',
-        ),
-        elevation: 2.0,
-        actions: [
-          FlatButton(
-            child: const Text(
-              'Logout',
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+            title: Text(
+              'FarmLab',
               style: TextStyle(
-                fontSize: 18.0,
-                color: Colors.white,
+                color: Color(0xFF151515),
+                fontSize: pW(18),
               ),
             ),
-            onPressed: () => _confirmSignOut(context),
-            //_confirmSignOut(context),
-          )
-        ],
+            centerTitle: true,
+            backgroundColor: Color(0xFFFFFFFF),
+            elevation: 0.0,
+            leading: Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(pW(16), pH(8),0,pH(8)),
+              child: Container(
+                child: Icon(Icons.add_rounded, size: 20,),
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Color(0xFF151515)),
+              ),
+            ),
+            actions: [
+              Icon(
+                Icons.notifications_none,
+                size: pW(24),
+                color: Color(0xFF151515),
+              ),
+              FlatButton(
+                child: const Text(
+                  'Logout',
+                  style: TextStyle(
+                    fontSize: 10.0,
+                    color: Color(0xFF151515),
+                  ),
+                ),
+                onPressed: () => _confirmSignOut(context),
+                //_confirmSignOut(context),
+              )
+            ],
+          ),
+
+        body: SingleChildScrollView(
+            child: Column(
+              children: [
+                _loading ? _loadingScreen(context) : _buildContents(context),
+              ],
+            ),
+        ),
       ),
-      body: _loading ? _loadingScreen(context) : _buildContents(context),
     );
   }
 
@@ -84,26 +121,30 @@ class _HomePageState extends State<HomePage> {
   Widget _buildContents(BuildContext context) {
     return RefreshIndicator(
       onRefresh: _getWeather,
-      child: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
+      child: Padding(
+          padding: EdgeInsetsDirectional.fromSTEB(pW(16), pH(24), pW(16), 0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              const Text(
+              Text(
                 'Dashboard',
-                style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.w500),
+                style: TextStyle(
+                  color: Color(0xFF151515),
+                    fontSize: pW(24),
+                    fontWeight: FontWeight.w600,
+                ),
                 textAlign: TextAlign.left,
               ),
-              const SizedBox(
-                height: 10,
+              SizedBox(
+                height: pH(12),
               ),
-              Card(
-                child: Column(
+
+              Column(
                   //crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding:  EdgeInsets.all(pW(8)),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         //mainAxisSize: MainAxisSize.max,
@@ -121,13 +162,17 @@ class _HomePageState extends State<HomePage> {
                                   _celsius
                                       ? "${_temperature.toStringAsFixed(0)}"
                                       : "${(_temperature * 1.8 + 32).toStringAsFixed(0)}",
-                                  style: TextStyle(fontSize: 40),
+                                  style: TextStyle(
+                                    color: Color(0xFF151515),
+                                      fontSize: pW(54),
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
                                 Opacity(
                                   opacity: 0,
                                   child: Text(
                                     "C",
-                                    style: TextStyle(fontSize: 15),
+                                    style: TextStyle(fontSize: pW(16)),
                                   ),
                                 ),
                                 Padding(
@@ -135,24 +180,24 @@ class _HomePageState extends State<HomePage> {
                                   child: Text(
                                     "C",
                                     style: TextStyle(
-                                        fontSize: 15,
+                                        fontSize: pW(16),
                                         color: _celsius
-                                            ? Colors.green
+                                            ? Color(0xFF008B61)
                                             : Colors.black),
                                   ),
                                 ),
                                 Text(
                                   "|",
-                                  style: TextStyle(fontSize: 15),
+                                  style: TextStyle(fontSize: pW(16)),
                                 ),
                                 Padding(
                                   padding: EdgeInsets.fromLTRB(4, 0, 0, 0),
                                   child: Text(
                                     "F",
                                     style: TextStyle(
-                                        fontSize: 15,
+                                        fontSize: pW(16),
                                         color: !_celsius
-                                            ? Colors.green
+                                            ? Color(0xFF008B61)
                                             : Colors.black),
                                   ),
                                 ),
@@ -161,66 +206,88 @@ class _HomePageState extends State<HomePage> {
                           ),
                           Container(
                             padding: const EdgeInsets.fromLTRB(0, 4, 4, 0),
-                            width: 200,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.end,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 GestureDetector(
                                     onTap: () => navigateAndDisplay(context),
                                     child: Row(
                                       mainAxisSize: MainAxisSize.min,
-                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      // mainAxisAlignment: MainAxisAlignment.center,
+                                      // crossAxisAlignment: CrossAxisAlignment.center,
                                       children: [
                                         Icon(
                                           Icons.my_location,
-                                          size: 15,
-                                          color: Colors.green,
+                                          size: pW(18),
+                                          color: Color(0xFF008B61),
                                         ),
                                         SizedBox(
-                                          width: 5,
+                                          width: pW(4),
                                         ),
                                         Text(
                                           _city,
-                                          style: TextStyle(color: Colors.green),
+                                          style: TextStyle(
+                                              color: Color(0xFF151515),
+                                            fontSize: pW(17)
+                                          ),
                                         ),
                                       ],//11 - 15
                                     )),
                                 SizedBox(
-                                  height: 8,
+                                  height: pH(4),
                                 ),
-                                Text("Synced ${_syncTime}"),
+                                Text("Synced ${_syncTime}",
+                                  style: TextStyle(
+                                      fontSize: pW(15),
+                                    color: Color(0xFFBDBDBD),
+                                  ),
+                                ),
                               ],
                             ),
                           ),
                         ],
                       ),
                     ),
-                    const SizedBox(
-                      height: 10,
+                    SizedBox(
+                      height: pH(6),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: Row(
+
+                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           CustomCard(
                             text: "Humidity",
                             value: "${_humidity}%",
+                            fsize1: pW(12),
+                            fsize2: pW(24),
+                            ht: pW(28),
+                              wd: pW(100),
+                            br: pW(6)
                           ),
                           CustomCard(
                             text: "Precipitation",
                             value: "${_precipitation}%",
+                              fsize1: pW(12),
+                              fsize2: pW(24),
+                              ht: pW(28),
+                              wd: pW(100),
+                              br: pW(6)
                           ),
                           CustomCard(
                             text: "Wind",
                             value: "${_wind.toStringAsFixed(0)}%",
+                              fsize1: pW(12),
+                              fsize2: pW(24),
+                              ht: pW(28),
+                              wd: pW(100),
+                              br: pW(6)
                           )
                         ],
                       ),
-                    )
+
                   ],
                 ),
-              ),
               /*Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -237,13 +304,45 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ],
               ),*/
-              const SizedBox(
-                height: 2000,
+               SizedBox(
+                height: pH(20),
               ),
+
+        Container(
+
+          decoration: BoxDecoration(
+              color: Color(0xFFFFFFFF),
+              borderRadius: BorderRadius.circular(6),
+              boxShadow: [new BoxShadow(
+                  color: Color(0xFFBDBDBD).withOpacity(0.4),
+                  spreadRadius: 0.5,
+                  blurRadius: 2.0,
+                  offset: Offset(1,2)
+              ),]
+          ),
+
+
+          child: Padding(
+            padding: EdgeInsetsDirectional.fromSTEB(pW(8),pH(8),pW(6),pH(10)),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Row(
+                  children: [
+
+                  ],
+                )
+              ],
+            ),
+          ),
+
+        ),
+
             ],
           ),
         ),
-      ),
     );
   }
 
