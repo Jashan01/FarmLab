@@ -1,14 +1,20 @@
 
-import 'package:farm_lab/app/home_page.dart';
+import 'package:farm_lab/app/sign_in_page.dart';
+import 'package:farm_lab/landing_page.dart';
+import 'package:farm_lab/services/auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:farm_lab/home_page.dart';
 
-void main() {
-  runApp(const MyApp());
+Future<void> main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp( MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  //const MyApp({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
   @override
@@ -27,13 +33,16 @@ class MyApp extends StatelessWidget {
       900:Color.fromRGBO(0,139,97, 1),
     };
     MaterialColor colorCustom = MaterialColor(0xFF008B61, color);
-      return MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          primarySwatch: colorCustom,
-        ),
-        home: HomePage(),
-    );
+      return Provider<AuthBase>(
+        create: (context) => Auth(),
+        child: MaterialApp(
+          title: 'FarmLab',
+          theme: ThemeData(
+            primarySwatch: colorCustom,
+          ),
+          home: HomePage(),
+    ),
+      );
   }
 }
 
