@@ -206,7 +206,6 @@ class _HomePageState extends State<HomePage> {
                           ),
                           Container(
                             padding: const EdgeInsets.fromLTRB(0, 4, 4, 0),
-
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.end,
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -289,7 +288,6 @@ class _HomePageState extends State<HomePage> {
 
                   ],
                 ),
-
               /*Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -605,7 +603,6 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
         ),
-
     );
   }
 

@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             primarySwatch: colorCustom,
           ),
-          home: HomePage(),
+          home: LandingPage(),
     ),
       );
   }
