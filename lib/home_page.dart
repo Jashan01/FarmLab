@@ -261,8 +261,8 @@ class _HomePageState extends State<HomePage> {
                             value: "${_humidity}%",
                             fsize1: pW(12),
                             fsize2: pW(24),
-                            ht: pW(28),
-                              wd: pW(100),
+                            ht: pW(32),
+                              wd: pW(110),
                             br: pW(6)
                           ),
                           CustomCard(
@@ -270,8 +270,8 @@ class _HomePageState extends State<HomePage> {
                             value: "${_precipitation}%",
                               fsize1: pW(12),
                               fsize2: pW(24),
-                              ht: pW(28),
-                              wd: pW(100),
+                              ht: pW(32),
+                              wd: pW(110),
                               br: pW(6)
                           ),
                           CustomCard(
@@ -279,8 +279,8 @@ class _HomePageState extends State<HomePage> {
                             value: "${_wind.toStringAsFixed(0)}%",
                               fsize1: pW(12),
                               fsize2: pW(24),
-                              ht: pW(28),
-                              wd: pW(100),
+                              ht: pW(32),
+                              wd: pW(110),
                               br: pW(6)
                           )
                         ],
@@ -305,11 +305,28 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),*/
                SizedBox(
-                height: pH(20),
+                height: pW(18),
               ),
-
+        Padding(
+          padding:  EdgeInsets.all(pW(10)),
+          child: Divider(
+            color: Color(0xFFBDBDBD),
+            thickness: 0.5,
+          ),
+        ),
+              Text(
+                'Soil Health',
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                    fontSize: pW(20),
+                    color: Color(0xFF151515),
+                    fontWeight: FontWeight.w700
+                ),
+              ),
+        SizedBox(
+          height: pW(12),
+        ),
         Container(
-
           decoration: BoxDecoration(
               color: Color(0xFFFFFFFF),
               borderRadius: BorderRadius.circular(6),
@@ -323,17 +340,260 @@ class _HomePageState extends State<HomePage> {
 
 
           child: Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(pW(8),pH(8),pW(6),pH(10)),
+            padding: EdgeInsetsDirectional.fromSTEB(pW(10),pW(12),pW(12),pW(15)),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisSize: MainAxisSize.max,
               children: [
+
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Crop',
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                              fontSize: pW(11),
+                              color: Color(0xFFBDBDBD),
+                              fontWeight: FontWeight.w600
+                          ),
+                        ),
+                        SizedBox(
+                          height: pW(6),
+                        ),
+                        Text(
+                          'Wheat',
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                              fontSize: pW(24),
+                              color: Color(0xFF008B61),
+                              fontWeight: FontWeight.w600
+                          ),
+                        ),
+                      ],
+                    ),
+
+
+
+
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          'Nature: Neutral (pH 7)',
+                          style: TextStyle(
+                              fontSize: pW(12),
+                              color: Color(0xFFBDBDBD),
+                              fontWeight: FontWeight.w600
+                          ),
+                          textAlign: TextAlign.right,
+                        ),
+                        SizedBox(
+                          height: pW(4),
+                        ),
+                        Text(
+                          'Moisture: 78%',
+                          style: TextStyle(
+                              fontSize: pW(12),
+                              color: Color(0xFFBDBDBD),
+                              fontWeight: FontWeight.w600
+                          ),
+                          textAlign: TextAlign.right,
+                        ),
+                      ],
+                    )
 
                   ],
-                )
+                ),
+                SizedBox(
+                  height: pW(30),
+                ),
+                Text(
+                  'Soil Content',
+                  style: TextStyle(
+                      fontSize: pW(10),
+                      color: Color(0xFFBDBDBD),
+                      fontWeight: FontWeight.w600
+                  ),
+
+                ),
+                SizedBox(
+                  height: pW(10),
+                ),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          '40 ppm',
+                          style: TextStyle(
+                              fontSize: pW(22),
+                              color: Color(0xFF151515),
+                              fontWeight: FontWeight.w600
+                          ),
+
+                        ),
+                        SizedBox(
+                          height: pW(6),
+                        ),
+                        Text(
+                          'Nitrogen',
+                          style: TextStyle(
+                              fontSize: pW(13),
+                              color: Color(0xFFBDBDBD),
+                              fontWeight: FontWeight.w600
+                          ),
+
+                        ),
+                      ],
+                    ),
+
+                    // VerticalDivider(
+                    //   color: Color(0xFFCECECE),
+                    //   thickness: 0.5,
+                    // ),
+
+                    Container(
+                      height: pW(42),
+                      width: 1.0,
+                      color: Color(0xFFCECECE),
+                    ),
+
+
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          '30 ppm',
+                          style: TextStyle(
+                              fontSize: pW(22),
+                              color: Color(0xFF151515),
+                              fontWeight: FontWeight.w600
+                          ),
+
+                        ),
+                        SizedBox(
+                          height: pW(6),
+                        ),
+                        Text(
+                          'Phosphorus',
+                          style: TextStyle(
+                              fontSize: pW(13),
+                              color: Color(0xFFBDBDBD),
+                              fontWeight: FontWeight.w600
+                          ),
+
+                        ),
+                      ],
+                    ),
+
+            Container(
+              height: pW(42),
+              width: 1.0,
+              color: Color(0xFFCECECE),
+            ),
+
+                    // VerticalDivider(
+                    //   color: Color(0xFF000000),
+                    //   thickness: 5,
+                    //
+                    // ),
+
+
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          '140 ppm',
+                          style: TextStyle(
+                              fontSize: pW(22),
+                              color: Color(0xFF151515),
+                              fontWeight: FontWeight.w600
+                          ),
+
+                        ),
+                        SizedBox(
+                          height: pW(6),
+                        ),
+                        Text(
+                          'Potassium',
+                          style: TextStyle(
+                              fontSize: pW(13),
+                              color: Color(0xFFBDBDBD),
+                              fontWeight: FontWeight.w600
+                          ),
+
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: pW(18),
+                ),
+                Container(
+                  height: 1,
+                  color: Color(0xFFCECECE),
+                ),
+                SizedBox(
+                  height: pW(10),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          'Soil: ',
+                          style: TextStyle(
+                              fontSize: pW(15),
+                              color: Color(0xFF151515),
+                              fontWeight: FontWeight.w500
+                          ),
+
+                        ),
+                        Text(
+                          'Healthy',
+                          style: TextStyle(
+                              fontSize: pW(16),
+                              color: Color(0xFF008B61),
+                              fontWeight: FontWeight.w600
+                          ),
+
+                        ),
+                      ],
+                    ),
+
+                    Row(
+                      children: [
+                        Text(
+                          'Synced 30 Days Ago ',
+                          style: TextStyle(
+                              fontSize: pW(13),
+                              color: Color(0xFFBDBDBD),
+                              fontWeight: FontWeight.w600
+                          ),
+
+                        ),
+                        Icon(
+                          Icons.wifi_protected_setup_sharp,
+                          color: Color(0xFF008B61),
+                          size: pW(20),
+                        )
+                      ],
+                    )
+
+                  ],
+
+                ),
+
               ],
             ),
           ),
