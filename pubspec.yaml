@@ -45,6 +45,7 @@ dependencies:
   google_maps_webservice: ^0.0.19
   geocoding: ^2.0.1
   intl: ^0.17.0
+  flutter_bluetooth_serial: ^0.4.0
 
 
   # The following adds the Cupertino Icons font to your application.
