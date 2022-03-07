@@ -1,4 +1,5 @@
 
+import 'package:farm_lab/app/shop_iot.dart';
 import 'package:farm_lab/app/sign_in_page.dart';
 import 'package:farm_lab/landing_page.dart';
 import 'package:farm_lab/services/auth.dart';
@@ -40,7 +41,7 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             primarySwatch: colorCustom,
           ),
-          home: LandingPage(),
+          home: Shoplist(),
     ),
       );
   }
