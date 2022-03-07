@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:farm_lab/profile/user_profile.dart';
 import 'package:farm_lab/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -27,6 +28,12 @@ class _HomePageState extends State<HomePage> {
   bool _loading = true;
   bool _celsius = true;
   String _syncTime = "null";
+  // int pageIndex = 0;
+
+  // final pages = [
+  //   HomePage(),
+  //   UserProfile(),
+  // ];
 
   Future<void> _signOut(BuildContext context) async {
     try {
@@ -71,6 +78,21 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       body: _loading ? _loadingScreen(context) : _buildContents(context),
+      //body: pages[pageIndex],
+      // bottomNavigationBar: Container(
+      //   height: 20,
+      //   decoration: BoxDecoration(
+      //     color: Theme.of(context).primaryColor,
+      //     borderRadius: const BorderRadius.only(
+      //       topLeft: Radius.circular(5),
+      //       topRight: Radius.circular(5),
+      //     ),
+      //   ),
+      //   child: Row(
+      //     mainAxisAlignment: MainAxisAlignment.spaceAround,
+      //     children:  _buildNavigtaorChildren(),
+      //   ),
+      // ),
     );
   }
 
@@ -300,4 +322,35 @@ class _HomePageState extends State<HomePage> {
       _loading = false;
     });
   }
+
+  // List<Widget> _buildNavigtaorChildren() {
+  //   return [
+  //     IconButton(
+  //       enableFeedback: false,
+  //       onPressed: () {
+  //         setState(() {
+  //           pageIndex = 0;
+  //         });
+  //       },
+  //       icon: const Icon(
+  //         Icons.home_outlined,
+  //         color: Colors.black,
+  //         size: 35,
+  //       ),
+  //     ),
+  //     IconButton(
+  //       enableFeedback: false,
+  //       onPressed: () {
+  //         setState(() {
+  //           pageIndex = 1;
+  //         });
+  //       },
+  //       icon: const Icon(
+  //         Icons.work_outline_outlined,
+  //         color: Colors.black,
+  //         size: 35,
+  //       ),
+  //     ),
+  //   ];
+  // }
 }
