@@ -1,10 +1,12 @@
 
+import 'package:farm_lab/app/shop_iot.dart';
 import 'package:farm_lab/app/sign_in_page.dart';
 import 'package:farm_lab/landing_page.dart';
 import 'package:farm_lab/services/auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:farm_lab/home_page.dart';
 
 Future<void> main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,7 +41,7 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             primarySwatch: colorCustom,
           ),
-          home: LandingPage(),
+          home: Shoplist(),
     ),
       );
   }
