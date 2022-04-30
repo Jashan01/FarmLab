@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             primarySwatch: colorCustom,
           ),
-          home: Shoplist(),
+          home: LandingPage(),
     ),
       );
   }

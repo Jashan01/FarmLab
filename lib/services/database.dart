@@ -6,6 +6,7 @@ import 'api_path.dart';
 
 abstract class Database{
   Future<void> createProfile(Profile profile);
+  Future<Profile> getUser() ;
 }
 class FirestoreDatabase implements Database{
   FirestoreDatabase({@required this.uid}) : assert(uid != null);
@@ -16,5 +17,10 @@ class FirestoreDatabase implements Database{
       path: APIpath.profile(uid),
       data: profile.toMap(),
     );
+  }
+  @override
+  Future<Profile> getUser() async {
+    final snapshot = await _service.getData(path: APIpath.profiles(), documentId: uid);
+    return Profile.fromMap(snapshot.data());
   }
 }

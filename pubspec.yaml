@@ -38,6 +38,7 @@ dependencies:
   flutter_platform_widgets: ^1.11.1
   image_picker: ^0.8.4+4
   firebase_analytics: ^8.3.4
+  tflite_flutter: ^0.9.0
   # map
   google_maps_flutter: ^2.1.1
   flutter_google_places: ^0.3.0
@@ -70,6 +71,7 @@ dev_dependencies:
 flutter:
   assets:
     - images/p1.jpg
+    - model.tflite
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
