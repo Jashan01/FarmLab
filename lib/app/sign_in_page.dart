@@ -1,3 +1,4 @@
+import 'package:farm_lab/app/phone_sign_in_form.dart';
 import 'package:farm_lab/custom_widgets/custom_button.dart';
 import 'package:farm_lab/services/auth.dart';
 import 'package:flutter/material.dart';
@@ -209,7 +210,9 @@ class _SignInPageState extends State<SignInPage> {
               ),
             ),
             SizedBox(height: 50),
-            TextField(
+            PhoneSignInForm(),
+            SizedBox(height: 20),
+            /*TextField(
               decoration: InputDecoration(
                 labelText: 'Phone Number',
                 labelStyle: TextStyle(
@@ -248,8 +251,7 @@ class _SignInPageState extends State<SignInPage> {
               text: 'Sign In',
               backgroundColor: Color(0xFF008B61),
               onPressed: () {},
-            ),
-            SizedBox(height: 20),
+            ),*/
             const Text(
               'or',
               style: TextStyle(
@@ -283,7 +285,7 @@ class _SignInPageState extends State<SignInPage> {
                         color: Color(0xFF008B61),
                       ),
                     ),
-                    onPressed: _toggleForm,
+                    onPressed:(){},
                   ),
                 ],
               ),

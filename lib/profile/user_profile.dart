@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:farm_lab/custom_widgets/custom_error_dialog.dart';
+import 'package:farm_lab/home_page.dart';
 import 'package:farm_lab/model/profile.dart';
 import 'package:farm_lab/services/database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -16,17 +17,18 @@ class UserProfile extends StatefulWidget {
 class _UserProfileState extends State<UserProfile> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
-  bool _isLoading = false;
+  bool _isLoading = true;
   final ImagePicker _picker = ImagePicker();
   String _imageUrl;
   File _image;
   @override
   Widget build(BuildContext context) {
+    _checkName();
     return Scaffold(
       appBar: AppBar(
         title: Center(child: Text("Edit Profile")),
       ),
-      body: _isLoading ? Center(child: CircularProgressIndicator(),) : _buildContent(context),
+      body: _isLoading ? const Center(child: CircularProgressIndicator(),) : _buildContent(context),
     );
   }
 
@@ -140,7 +142,7 @@ class _UserProfileState extends State<UserProfile> {
           try{
             await database.createProfile(profile);
             setState(() {
-              _isLoading = false;
+              _isLoading = true;
             });
             await CustomErrorDialog.show(
                 context: context,
@@ -172,6 +174,24 @@ class _UserProfileState extends State<UserProfile> {
         message: 'Please enter name',
       );
     }
+  }
+
+  void _checkName() async{
+    final Database database = Provider.of<Database>(context, listen: false);
+    Profile profile = await database.getUser();
+      if(profile!=null && profile.name!=null)
+        {
+          Navigator.pop(context);
+          Navigator.of(context).push(MaterialPageRoute<void>(
+            fullscreenDialog: true,
+            builder: (context) => HomePage(),
+          ));
+        }
+      else{
+        setState(() {
+          _isLoading = false;
+        });
+      }
   }
 
 }

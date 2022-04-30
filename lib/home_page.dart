@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:farm_lab/ml_model_tester.dart';
 import 'package:farm_lab/profile/user_profile.dart';
 import 'package:farm_lab/bluetooth/MainPage.dart';
 import 'package:farm_lab/services/auth.dart';
@@ -117,7 +118,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
-      body: _loading ? _loadingScreen(context) : _buildContents(context),
+      //body: _loading ? _loadingScreen(context) : _buildContents(context),
       //body: pages[pageIndex],
       // bottomNavigationBar: Container(
       //   height: 20,
@@ -588,6 +589,17 @@ class _HomePageState extends State<HomePage> {
                 ));
               },
               child: Text('Connect to Device'),
+            ),
+            SizedBox(height: 10,),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context, rootNavigator: true)
+                    .push(MaterialPageRoute(
+                  fullscreenDialog: true,
+                  builder: (context) => MlModelTester(),
+                ));
+              },
+              child: Text('ML model tester'),
             ),
           ],
         ),
